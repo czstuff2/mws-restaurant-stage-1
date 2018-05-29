@@ -1,0 +1,8 @@
+@media screen and (max-width: 800px) {
+	/*  Fix Title Spacing / Size  */
+	nav h1 a {
+		letter-spacing: 0.1em;
+		font-size: 1.25em;
+		line-height: 3em;
+	}
+}
