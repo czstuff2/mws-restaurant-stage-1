@@ -5,4 +5,13 @@
 		font-size: 1.25em;
 		line-height: 3em;
 	}
+
+}
+
+
+@media screen and (min-width: 460px) {
+	/* Filter Selectors fit on same line */
+	.filter-options select {
+		width: auto;
+	}
 }
