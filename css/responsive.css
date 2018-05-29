@@ -1,4 +1,4 @@
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
 	/*  Fix Title Spacing / Size  */
 	nav h1 a {
 		letter-spacing: 0.1em;
@@ -13,5 +13,14 @@
 	/* Filter Selectors fit on same line */
 	.filter-options select {
 		width: auto;
+	}
+}
+
+@media screen and (min-width: 630px) {
+	#restaurants-list li {
+		width: calc(100% / 2 - 100px);
+	}
+	#restaurants-list .restaurant-img {
+		min-height: 200px;
 	}
 }
