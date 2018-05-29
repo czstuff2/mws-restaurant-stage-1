@@ -24,3 +24,19 @@
 		min-height: 200px;
 	}
 }
+
+
+
+.inside #maincontent {
+  	/*  Fix layout on small screens w/ flexgrid */
+	display: flex;
+	flex-wrap: wrap;
+}
+.inside #maincontent #map-container {
+	height: 400px;
+	width: 100%;
+	position: inherit;
+}
+#restaurant-container, #reviews-container {
+	width: 100%;
+}
