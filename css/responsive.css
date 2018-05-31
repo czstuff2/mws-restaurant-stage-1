@@ -90,9 +90,9 @@
 	}
 }
 
-@media screen and (min-width: 1300px) {
+@media screen and (min-width: 1200px) {
 	#restaurants-list li {
-		max-width: 600px;
+		max-width: 450px;
 		margin-right: auto;
 		margin-left: auto;
 	}
