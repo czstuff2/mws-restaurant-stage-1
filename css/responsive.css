@@ -46,7 +46,10 @@
 		width: calc(100% / 2 - 100px);
 	}
 	#restaurants-list .restaurant-img {
-		min-height: 200px;
+		min-height: 180px;
+	}
+	.restaurant-img {
+		max-height: 400px;
 	}
 	/* Fix Font sizes */
 	#restaurant-address {
@@ -87,4 +90,11 @@
 	}
 }
 
+@media screen and (min-width: 1200px) {
+	#restaurants-list li {
+		max-width: 450px;
+		margin-right: auto;
+		margin-left: auto;
+	}
+}
 
