@@ -15,9 +15,11 @@ self.addEventListener('install', function(event) {
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700',
 		'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2',
 		'https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4.woff2'
-
 	];
-	caches.open('mytest').then(function(cache) {
 
-	});
+	event.waitUntil(
+		caches.open('mytest').then(function(cache){
+			return cache.addAll(urlsToCache);
+		})
+	);
 });
