@@ -281,6 +281,8 @@ nav h1 a {
   padding: 0 20px 20px;
   position: relative;
   width: 85%;
+  margin-right: auto;
+  margin-left: auto;
 }
 #reviews-list li p {
   margin: 0 0 10px;
