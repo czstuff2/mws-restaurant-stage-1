@@ -27,7 +27,7 @@ self.addEventListener('fetch', function(event) {
 			if (response) {
 				return response;
 			/* If the uncached asset is an img cache it for next time */
-			} else if (event.request.url.startsWith("http://localhost:3000/img")) {
+			} else if (event.request.url.startsWith("http://localhost:8000/img")) {
 				urlsToCache.push(event.request.url);
 				console.log("Cached an Image");
 				caches.open('mytest').then(function(cache) {
