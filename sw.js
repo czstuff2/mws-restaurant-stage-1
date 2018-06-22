@@ -11,6 +11,8 @@ self.addEventListener('install', function(event) {
 		'js/mainController.js',
 		'js/restaurant_info.js',
 		'js/idb.js',
+		'img/fa-image.png',
+		'js/lazysizes.min.js',
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700',
 		'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2',
 		'https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4.woff2',
@@ -40,13 +42,18 @@ self.addEventListener('fetch', function(event) {
 			if (response) {
 				return response;
 			/* If the uncached asset is an img cache it for next time */
-			} else if (event.request.url.startsWith("http://localhost:8000/img")) {
+			} else if (event.request.url.startsWith("http://localhost:8000/dist/img")) {
 				urlsToCache.push(event.request.url);
 				caches.open('mytest').then(function(cache) {
 					cache.addAll(urlsToCache);
+					console.log("caching an img");
 				})	
-			} else if (event.request.url.startsWith('http://localhost:1337')) {
-				console.log(event.request);
+			} else if (event.request.url.startsWith('https://api.tiles')) {
+				urlsToCache.push(event.request.url);
+				caches.open('mytest').then(function(cache) {
+					cache.addAll(urlsToCach);
+					console.log("caching Mapbox")
+				})
 			}
 			/* If uncached asset is not an img, fetch it normally and return it */
 			return fetch(event.request);

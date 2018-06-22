@@ -8,6 +8,27 @@ var markers = []
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target;
+          lazyImage.src = lazyImage.dataset.src;
+          lazyImage.srcset = lazyImage.dataset.srcset;
+          lazyImage.classList.remove("lazy");
+          lazyImageObserver.unobserve(lazyImage);
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage);
+    });
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
   initMap(); // added
   fetchNeighborhoods();
   fetchCuisines();
@@ -157,8 +178,11 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.className = 'restaurant-img lazyload';
+  const imageUrlForRestaurant = DBHelper.imageUrlForRestaurant(restaurant);
+  image.src = `/dist/img/fa-image.png`;
+  image.setAttribute("data-src", `${imageUrlForRestaurant}-200px.jpg`);
+  image.setAttribute("data-srcset", `${imageUrlForRestaurant}-original.jpg`);
   image.setAttribute("alt", "Image of " + restaurant.name + " Restaurant.  ");
   li.append(image);
 
