@@ -51,7 +51,7 @@ self.addEventListener('fetch', function(event) {
 			} else if (event.request.url.startsWith('https://api.tiles')) {
 				urlsToCache.push(event.request.url);
 				caches.open('mytest').then(function(cache) {
-					cache.addAll(urlsToCach);
+					cache.addAll(urlsToCache);
 					console.log("caching Mapbox")
 				})
 			}
