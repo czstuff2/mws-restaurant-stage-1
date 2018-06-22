@@ -7,7 +7,7 @@ self.addEventListener('install', function(event) {
 		'js/main.js',
 		'js/mainController.js',
 		'js/restaurant_info.js',
-		'data/restaurants.json',
+		'js/idb.js',
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700',
 		'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2',
 		'https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4.woff2',
@@ -43,6 +43,8 @@ self.addEventListener('fetch', function(event) {
 				caches.open('mytest').then(function(cache) {
 					cache.addAll(urlsToCache);
 				})	
+			} else if (event.request.url.startsWith('http://localhost:1337')) {
+				console.log(event.request);
 			}
 			/* If uncached asset is not an img, fetch it normally and return it */
 			return fetch(event.request);
