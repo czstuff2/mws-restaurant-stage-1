@@ -1,6 +1,10 @@
 /**
  * Common database helper functions.
  */
+let dbPromise = idb.open('restaurants', 1, upgradeDB => {
+    let keyValStore = upgradeDB.createObjectStore('restaurants');
+  });
+
 class DBHelper {
 
   /**
@@ -16,18 +20,38 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    fetch(DBHelper.DATABASE_URL)
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function (restaurants) {
-        console.log(restaurants);
-        callback(null, restaurants);
-      })
-      .catch(function (err) {
-        console.log(err);
-        callback(null, err);
-      })
+    dbPromise.then( (db) => {
+      let tx = db.transaction('restaurants', 'readwrite');
+      let restaurantValStore = tx.objectStore('restaurants');
+      return restaurantValStore.getAll();
+      }).then(val => {
+        if (val.length === 0) {
+          console.log("No values, add them")
+          fetch(DBHelper.DATABASE_URL)
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function (restaurants) {
+              dbPromise.then( (db) => {
+                let restaurantValStore = db.transaction('restaurants', 'readwrite').objectStore('restaurants')
+                for (const restaurant of restaurants) {
+                  restaurantValStore.put(restaurant, restaurant.id)
+                }
+              
+              })
+              callback(null, restaurants);
+          })
+            .catch(function (err) {
+              console.log(err);
+              callback(null, err);
+          })
+        } else {
+          console.log(`Found values: ${val}`)
+          callback(null, val)
+        }
+      });
+
+    
   }
 
   /**
@@ -179,4 +203,4 @@ class DBHelper {
     return marker;
   } */
 
-}
+} 

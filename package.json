@@ -1,0 +1,35 @@
+{
+  "name": "mws-revamp-stage-2",
+  "version": "1.0.0",
+  "description": "stage-2 of Udacity MWS Project",
+  "main": "gulpfile.js",
+  "scripts": {
+    "babel": "babel --presets es2015 js/dbhelper.js -o dist/dbhelper.bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/czstuff2/mws-revamp-stage-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/czstuff2/mws-revamp-stage-2/issues"
+  },
+  "dependencies": {
+    "babelify": "^8.0.0",
+    "browser-sync": "^2.11.1",
+    "browserify": "^16.2.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.0.1",
+    "gulp-uglify": "^3.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "fs": "0.0.1-security",
+    "idb": "^2.1.3"
+  },
+  "homepage": "https://github.com/czstuff2/mws-revamp-stage-2#readme",
+  "devDependencies": {}
+}
