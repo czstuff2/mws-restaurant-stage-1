@@ -29,7 +29,8 @@ self.addEventListener('install', function(event) {
 	];
 
 	event.waitUntil(
-		caches.open('mytest').then(function(cache){
+		caches.open('scaffolding').then(function(cache){
+			console.log("Cached scaffolding");
 			return cache.addAll(urlsToCache);
 		}))
 });
@@ -44,13 +45,13 @@ self.addEventListener('fetch', function(event) {
 			/* If the uncached asset is an img cache it for next time */
 			} else if (event.request.url.startsWith("http://localhost:8000/dist/img")) {
 				urlsToCache.push(event.request.url);
-				caches.open('mytest').then(function(cache) {
+				caches.open('scaffolding').then(function(cache) {
 					cache.addAll(urlsToCache);
 					console.log("caching an img");
 				})	
 			} else if (event.request.url.startsWith('https://api.tiles')) {
 				urlsToCache.push(event.request.url);
-				caches.open('mytest').then(function(cache) {
+				caches.open('scaffolding').then(function(cache) {
 					cache.addAll(urlsToCache);
 					console.log("caching Mapbox")
 				})

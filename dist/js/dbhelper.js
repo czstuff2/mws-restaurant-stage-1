@@ -20,7 +20,7 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    dbPromise.then( (db) => {
+    /*dbPromise.then( (db) => {
       let tx = db.transaction('restaurants', 'readwrite');
       let restaurantValStore = tx.objectStore('restaurants');
       return restaurantValStore.getAll();
@@ -49,10 +49,10 @@ class DBHelper {
           console.log(`Found values: ${val}`)
           callback(null, val)
         }
-      }); 
+      }); */
     // if fetch fails, we want to pull from cache
     // if fetch is successful we want to cache json
-    /*fetch(DBHelper.DATABASE_URL) 
+    fetch(DBHelper.DATABASE_URL) 
       .then(function(response) {
         return response.json();
     }).then(function(restaurants) {
@@ -75,7 +75,7 @@ class DBHelper {
       }).then(val => {
         callback(null, val)
       })
-    })*/
+    })
 
     
   }
