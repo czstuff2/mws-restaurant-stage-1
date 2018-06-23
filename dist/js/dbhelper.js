@@ -53,9 +53,8 @@ class DBHelper {
     // if fetch fails, we want to pull from cache
     // if fetch is successful we want to cache json
     fetch(DBHelper.DATABASE_URL) 
-      .then(function(response) {
-        return response.json();
-    }).then(function(restaurants) {
+      .then(response => response.json())
+      .then(function(restaurants) {
       console.log('successfully pulled restaurants json data')
       // now cache it
         dbPromise.then( (db) => {
