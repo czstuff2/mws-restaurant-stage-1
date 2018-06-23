@@ -68,11 +68,11 @@ class DBHelper {
       // now return it
         callback(null, restaurants);
     }).catch(function (err) {
-      console.log("Failed to fetch restaurant json, attempting to pull from cache")
       dbPromise.then( (db) => {
         let restaurantValStore = db.transaction('restaurants').objectStore('restaurants')
         return restaurantValStore.getAll();
       }).then(val => {
+        console.log("Failed to fetch restaurant json, pulled from cache")
         callback(null, val)
       })
     })
