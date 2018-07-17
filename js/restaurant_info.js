@@ -307,3 +307,30 @@ checkbox.addEventListener("click", function() {
     })
   }
 })
+let formReview = document.getElementById('reviewForm');
+formReview.addEventListener('submit', function(e) {
+  e.preventDefault();
+})
+
+let submitReview = document.getElementById('reviewSubmitBtn');
+submitReview.addEventListener('click', function(event) {
+  let userName = document.getElementById('reviewUserName').value;
+  let rating = document.getElementById('reviewRating').value;
+  let comments = document.getElementById('restaurantComments').value;
+  let review = {
+    name:  `${userName}`,
+    restaurant_id: `${self.restaurant.id}`,
+    rating: `${rating}`,
+    comments: `${comments}`
+  }
+  DBHelper.submitReview(review, (error, review) => {
+      let newReview = review;
+      if (!newReview) {
+        console.warn('No Connectivity')
+        return;
+      } else {
+
+      }
+    })
+
+})

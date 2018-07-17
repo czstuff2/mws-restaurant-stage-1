@@ -5,6 +5,7 @@ let dbPromise = idb.open('restaurants', 1, upgradeDB => {
     let restaurantValStore = upgradeDB.createObjectStore('restaurants');
     let favoriteValStore = upgradeDB.createObjectStore('favorites');
     let reviewsValStore = upgradeDB.createObjectStore('reviews'); 
+    let tempReviewsValStore = upgradeDB.createObjectStore('tempReviews');
   });
 
 class DBHelper {
@@ -101,6 +102,31 @@ class DBHelper {
           console.log("Failed to fetch restaurant reviews, pulled from cache")
           callback(null, val)
         })
+      })
+  }
+  //POST a new review
+  static submitReview(review, callback) {
+    dbPromise.then( (db) => {
+      let tempReviewsValStore = db.transaction('tempReviews', 'readwrite').objectStore('tempReviews')
+      tempReviewsValStore.put(review, review.restaurant_id)
+    })
+    fetch(`http://localhost:1337/reviews/`, {
+      method: "POST",
+      headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+      body: JSON.stringify(review)
+    }).then(response => response.json())
+      .then(function(newReview) {
+        dbPromise.then( (db) => {
+          let tempReviewsValStore = db.transaction('tempReviews', 'readwrite').objectStore('tempReviews')
+          tempReviewsValStore.delete(review.restaurant_id)
+        })
+        console.log("added Review, removed from cache")
+        callback(null, newReview);
+      }).catch(function(err) {
+        console.log("Connection Issue, failed");
+        callback(err, null);
       })
   }
   // favoriteRestaurantById
