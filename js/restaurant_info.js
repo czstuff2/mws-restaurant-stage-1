@@ -91,10 +91,37 @@ fetchRestaurantFromURL = (callback) => {
         console.error(error);
         return;
       }
+      fetchIfFavorite(id);
       fillRestaurantHTML();
       callback(null, restaurant)
     });
   }
+}
+
+/**
+ * Fetch if restaurant is a favorite or not and update toggle switch
+ */
+fetchIfFavorite = (id) => {
+  DBHelper.fetchFavoritesById(id, (error, restaurant) => {
+    let favorite = restaurant;
+    if (!favorite) {
+      console.log(`Not Favorited)`);
+      return;
+    } else {
+      // This means the target restaurant is favorited and we need to update the toggle
+      fillFavoriteToggle();
+    }
+  })
+}
+
+/**
+ * Restaurant favorite toggle needs to be updated here to visual show it is favorited
+ */
+fillFavoriteToggle = () => {
+  let checkbox = document.getElementById('isFavorited');
+  checkbox.checked = true;
+  checkbox.setAttribute("checked", "true");
+  checkbox.setAttribute("aria-checked", "true");
 }
 
 /**
