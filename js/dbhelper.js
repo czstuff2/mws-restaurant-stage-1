@@ -80,21 +80,40 @@ class DBHelper {
     
   }
   // favoriteRestaurantById
-  static favoriteRestaurantById(id, callback) {
-    fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=true`, {
+  static favoriteRestaurantById(restaurant, callback) {
+    fetch(`${DBHelper.DATABASE_URL}/${restaurant.id}/?is_favorite=true`, {
       method: "PUT"
     }).then(response => response.json())
       .then(function(newRestaurant) {
         console.log("added Favorite")
-        dbPromise.then( (db) => {
-          let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
-          favoriteValStore.put(newRestaurant, id); 
-        }) 
         callback(null, newRestaurant);
       }).catch(function (err) {
-        console.log(err);
+        console.log("Connection issue, failed");
         callback(err, null);
       })
+    // even if this fails, we'll add to cache
+    dbPromise.then( (db) => {
+        let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
+        favoriteValStore.put(restaurant, restaurant.id); 
+    }) 
+  }
+  // unfavoriteRestaurantById
+  static unfavoriteRestaurantById(restaurant, callback) {
+    fetch(`${DBHelper.DATABASE_URL}/${restaurant.id}/?is_favorite=false`, {
+      method: "PUT"
+    }).then(response => response.json())
+      .then(function(newRestaurant) {
+        console.log("removed Favorite")
+        callback(null, newRestaurant);
+      }).catch(function (err) {
+        console.log("Connection issue, failed");
+        callback(err, null);
+      })
+    // even if this fails, we'll add to cache
+    dbPromise.then( (db) => {
+      let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
+      favoriteValStore.delete(restaurant.id);
+    })
   }
 
   // Fetch favorited restaurants

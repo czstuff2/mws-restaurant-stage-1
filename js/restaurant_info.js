@@ -129,15 +129,10 @@ fillFavoriteToggle = () => {
   let header = document.getElementById('favoriteHeader');
   header.innerHTML = "Favorited";
 
-  // since restaurant is a favorite, set a toggle onClick function to remove
-  // from cache AND API via DBHelper calling removeFavoriteToggle
-  checkbox.addEventListener('click', function() {
-    removeFavoriteToggle();
-  })
 }
 
-removeFavoriteToggle = () => {
-  DBHelper.unfavoriteRestaurantById(self.restaurant.id, (error, restaurant) => {
+/*removeFavoriteToggle = () => {
+  DBHelper.unfavoriteRestaurantById(self.restaurant, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log('Did not unfavorite successfully')
@@ -154,10 +149,10 @@ removeFavoriteToggle = () => {
       })
     }
   })
-}
+} */
 
-addFavoriteToggle = () => {
-  DBHelper.favoriteRestaurantById(self.restaurant.id, (error, restaurant) => {
+/* addFavoriteToggle = () => {
+  DBHelper.favoriteRestaurantById(self.restaurant, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log('Did not favorite successfully')
@@ -178,6 +173,7 @@ addFavoriteToggle = () => {
     }
   })
 }
+*/
 
 /**
  * Create restaurant HTML and add it to the webpage
@@ -300,3 +296,39 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+let checkbox = document.getElementById('isFavorited');
+checkbox.addEventListener("click", function() {
+  if (checkbox.checked === true) {
+    // add to favorites dbhelper
+    DBHelper.favoriteRestaurantById(self.restaurant, (error, restaurant) => {
+      let favorite = restaurant;
+      if (!favorite) {
+        console.log('Did not favorite successfully')
+        return;
+      } else {
+        let checkbox = document.getElementById('isFavorited');
+        checkbox.checked = true;
+        checkbox.setAttribute("checked", "true");
+        checkbox.setAttribute("aria-checked", "true");
+        let header = document.getElementById('favoriteHeader');
+        header.innerHTML = "Favorited";
+      }
+    })
+  } else {
+    DBHelper.unfavoriteRestaurantById(self.restaurant, (error, restaurant) => {
+      let favorite = restaurant;
+      if (!favorite) {
+        console.log('Did not unfavorite successfully')
+        return;
+      } else {
+        let checkbox = document.getElementById('isFavorited');
+        checkbox.checked = false;
+        checkbox.setAttribute("checked", "false");
+        checkbox.setAttribute("aria-checked", "false");
+        let header = document.getElementById('favoriteHeader');
+        header.innerHTML = "Add to Favorites";
+      }
+    })
+  }
+})
