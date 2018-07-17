@@ -110,7 +110,6 @@ class DBHelper {
       let tempReviewsValStore = db.transaction('tempReviews', 'readwrite').objectStore('tempReviews')
       tempReviewsValStore.put(review, review.restaurant_id)
     })
-    console.log(review);
     fetch(`http://localhost:1337/reviews/`, {
       method: "POST",
       headers: {

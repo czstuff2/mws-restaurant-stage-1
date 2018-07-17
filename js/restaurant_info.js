@@ -317,19 +317,29 @@ submitReview.addEventListener('click', function(event) {
   let userName = document.getElementById('reviewUserName').value;
   let rating = document.getElementById('reviewRating').value;
   let comments = document.getElementById('restaurantComments').value;
-  let review = {
+  let oldReview = {
     name:  `${userName}`,
     restaurant_id: `${self.restaurant.id}`,
     rating: `${rating}`,
     comments: `${comments}`
   }
-  DBHelper.submitReview(review, (error, review) => {
+  DBHelper.submitReview(oldReview, (error, review) => {
       let newReview = review;
       if (!newReview) {
         console.warn('No Connectivity')
-        return;
+        let formReview = document.getElementById('reviewForm');
+        formReview.reset();
+        const container = document.getElementById('reviews-container');
+        const ul = document.getElementById('reviews-list');
+        ul.appendChild(createReviewHTML(oldReview));
+        container.appendChild(ul);
       } else {
-
+        let formReview = document.getElementById('reviewForm');
+        formReview.reset();
+        const container = document.getElementById('reviews-container');
+        const ul = document.getElementById('reviews-list');
+        ul.appendChild(createReviewHTML(review));
+        container.appendChild(ul);
       }
     })
 
