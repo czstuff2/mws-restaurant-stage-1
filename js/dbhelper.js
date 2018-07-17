@@ -2,7 +2,8 @@
  * Common database helper functions.
  */
 let dbPromise = idb.open('restaurants', 1, upgradeDB => {
-    let keyValStore = upgradeDB.createObjectStore('restaurants');
+    let restaurantValStore = upgradeDB.createObjectStore('restaurants');
+    let favoriteValStore = upgradeDB.createObjectStore('favorites');
   });
 
 class DBHelper {
@@ -55,8 +56,8 @@ class DBHelper {
     fetch(DBHelper.DATABASE_URL) 
       .then(response => response.json())
       .then(function(restaurants) {
-      console.log('successfully pulled restaurants json data')
-      // now cache it
+        console.log('successfully pulled restaurants json data')
+        // now cache it
         dbPromise.then( (db) => {
           let restaurantValStore = db.transaction('restaurants', 'readwrite').objectStore('restaurants')
             for (const restaurant of restaurants) {
@@ -78,6 +79,34 @@ class DBHelper {
 
     
   }
+
+  // Fetch favorited restaurants
+  static fetchFavorites(callback) {
+    fetch(`${DBHelper.DATABASE_URL}/?is_favorite=true`)
+      .then(response => response.json())
+      .then(function(favorites) {
+        console.log(`successfully pulled favorite restaurants data`)
+        // now cache it
+        dbPromise.then( (db) => {
+          let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
+            for (const favorite of favorites) {
+              favoriteValStore.put(favorite, favorite.id)
+            }
+        })
+        //now return it
+        callback(null, favorites);
+      }).catch(function (err) {
+        dbPromise.then( (db) => {
+          let favoriteValStore = db.transaction('favorites').objectStore('favorites')
+          return favoriteValStore.getAll();
+        }).then(val => {
+          console.log("Failed to fetch favorites json, pulled from cache")
+          callback(null, val)
+        })
+      })
+
+  }
+
 
   /**
    * Fetch a restaurant by its ID.
