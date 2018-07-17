@@ -86,11 +86,13 @@ class DBHelper {
     }).then(response => response.json())
       .then(function(newRestaurant) {
         console.log("added Favorite")
-        let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
-        favoriteValStore.delete(id);      
+        dbPromise.then( (db) => {
+          let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
+          favoriteValStore.put(newRestaurant, id); 
+        }) 
         callback(null, newRestaurant);
       }).catch(function (err) {
-        console.log("Failed to favorite restaurant")
+        console.log(err);
         callback(err, null);
       })
   }

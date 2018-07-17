@@ -107,9 +107,9 @@ fetchIfFavorite = (id) => {
     if (!favorite) {
       console.log(`Not Favorited`);
       let checkbox = document.getElementById('isFavorited');
-      checkbox.onClick = function() {
+      checkbox.addEventListener('click', function() {
         addFavoriteToggle();
-      }
+      })
       return;
     } else {
       // This means the target restaurant is favorited and we need to update the toggle
@@ -131,14 +131,13 @@ fillFavoriteToggle = () => {
 
   // since restaurant is a favorite, set a toggle onClick function to remove
   // from cache AND API via DBHelper calling removeFavoriteToggle
-
-  checkbox.onClick = function() {
+  checkbox.addEventListener('click', function() {
     removeFavoriteToggle();
-  }
+  })
 }
 
 removeFavoriteToggle = () => {
-  DBHelper.unfavoriteRestaurantById(restaurant.id, (error, restaurant) => {
+  DBHelper.unfavoriteRestaurantById(self.restaurant.id, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log('Did not unfavorite successfully')
@@ -150,15 +149,15 @@ removeFavoriteToggle = () => {
       checkbox.setAttribute("aria-checked", "false");
       let header = document.getElementById('favoriteHeader');
       header.innerHTML = "Add to Favorites";
-      checkbox.onClick = function() {
+      checkbox.addEventListener('click', function() {
         addFavoriteToggle();
-      }
+      })
     }
   })
 }
 
 addFavoriteToggle = () => {
-  DBHelper.favoriteRestaurantById(restaurant.id, (error, restaurant) => {
+  DBHelper.favoriteRestaurantById(self.restaurant.id, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log('Did not favorite successfully')
@@ -173,10 +172,9 @@ addFavoriteToggle = () => {
 
       // since restaurant is a favorite, set a toggle onClick function to remove
       // from cache AND API via DBHelper calling removeFavoriteToggle
-
-      checkbox.onClick = function() {
+      checkbox.addEventListener('click', function() {
         removeFavoriteToggle();
-      }
+      })
     }
   })
 }

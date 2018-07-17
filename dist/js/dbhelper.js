@@ -79,6 +79,23 @@ class DBHelper {
 
     
   }
+  // favoriteRestaurantById
+  static favoriteRestaurantById(id, callback) {
+    fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=true`, {
+      method: "PUT"
+    }).then(response => response.json())
+      .then(function(newRestaurant) {
+        console.log("added Favorite")
+        dbPromise.then( (db) => {
+          let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
+          favoriteValStore.put(newRestaurant, id); 
+        }) 
+        callback(null, newRestaurant);
+      }).catch(function (err) {
+        console.log(err);
+        callback(err, null);
+      })
+  }
 
   // Fetch favorited restaurants
   static fetchFavorites(callback) {
