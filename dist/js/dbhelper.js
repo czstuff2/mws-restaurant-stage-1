@@ -4,6 +4,7 @@
 let dbPromise = idb.open('restaurants', 1, upgradeDB => {
     let restaurantValStore = upgradeDB.createObjectStore('restaurants');
     let favoriteValStore = upgradeDB.createObjectStore('favorites');
+    let reviewsValStore = upgradeDB.createObjectStore('reviews'); 
   });
 
 class DBHelper {
@@ -78,6 +79,29 @@ class DBHelper {
     })
 
     
+  }
+  // fetch all reviews for a restaurant
+  static fetchRestaurantReviews(restaurant, callback) {
+    fetch(`http://localhost:1337/reviews/?restaurant_id=${restaurant.id}`)
+      .then(response => response.json())
+      .then(function(reviews) {
+        console.log(`pulled reviews for ${restaurant.name}`)
+          //now cache it
+        dbPromise.then( (db) => {
+          let reviewsValStore = db.transaction('reviews', 'readwrite').objectStore('reviews')
+          reviewsValStore.put(reviews, restaurant.id)
+        })
+        callback(null, reviews)
+        
+      }).catch(function (err) {
+        dbPromise.then( (db) => {
+          let reviewsValStore = db. transaction('reviews').objectStore('reviews')
+          return reviewsValStore.get(restaurant.id);
+        }).then(val => {
+          console.log("Failed to fetch restaurant reviews, pulled from cache")
+          callback(null, val)
+        })
+      })
   }
   // favoriteRestaurantById
   static favoriteRestaurantById(restaurant, callback) {
