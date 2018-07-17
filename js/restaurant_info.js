@@ -105,7 +105,7 @@ fetchIfFavorite = (id) => {
   DBHelper.fetchFavoriteById(id, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
-      console.log(`Not Favorited)`);
+      console.log(`Not Favorited`);
       return;
     } else {
       // This means the target restaurant is favorited and we need to update the toggle
@@ -123,7 +123,7 @@ fillFavoriteToggle = () => {
   checkbox.setAttribute("checked", "true");
   checkbox.setAttribute("aria-checked", "true");
   let header = document.getElementById('favoriteHeader');
-  header.text("Favorited");
+  header.innerHTML = "Favorited";
 }
 
 /**

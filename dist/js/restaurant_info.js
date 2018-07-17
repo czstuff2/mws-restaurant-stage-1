@@ -123,7 +123,7 @@ fillFavoriteToggle = () => {
   checkbox.setAttribute("checked", "true");
   checkbox.setAttribute("aria-checked", "true");
   let header = document.getElementById('favoriteHeader');
-  header.text("Favorited");
+  header.innerHTML = "Favorited";
 }
 
 /**
