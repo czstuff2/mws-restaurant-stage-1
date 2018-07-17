@@ -107,12 +107,12 @@ class DBHelper {
 
   }
   // Fetch favorited restaurants by ID
-  static fetchFavoritesById(id, callback) {
+  static fetchFavoriteById(id, callback) {
     DBHelper.fetchFavorites((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
-        const restaurants.find(r => r.id == id);
+        const restaurant = restaurants.find(r => r.id == id);
         if (restaurant) { // Got the restaurant
           callback(null, restaurant);
         } else { // restaurant does not exist in the database

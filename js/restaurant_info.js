@@ -102,7 +102,7 @@ fetchRestaurantFromURL = (callback) => {
  * Fetch if restaurant is a favorite or not and update toggle switch
  */
 fetchIfFavorite = (id) => {
-  DBHelper.fetchFavoritesById(id, (error, restaurant) => {
+  DBHelper.fetchFavoriteById(id, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log(`Not Favorited)`);
@@ -122,6 +122,8 @@ fillFavoriteToggle = () => {
   checkbox.checked = true;
   checkbox.setAttribute("checked", "true");
   checkbox.setAttribute("aria-checked", "true");
+  let header = document.getElementById('favoriteHeader');
+  header.text("Favorited");
 }
 
 /**
