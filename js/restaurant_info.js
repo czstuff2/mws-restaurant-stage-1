@@ -138,7 +138,7 @@ fillFavoriteToggle = () => {
 }
 
 removeFavoriteToggle = () => {
-  DBHelper.UnfavoriteRestaurantById(restaurant.id, (error, restaurant) => {
+  DBHelper.unfavoriteRestaurantById(restaurant.id, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log('Did not unfavorite successfully')
@@ -158,7 +158,7 @@ removeFavoriteToggle = () => {
 }
 
 addFavoriteToggle = () => {
-  DBHelper.FavoriteRestaurantById(restaurant.id, (error, restaurant) => {
+  DBHelper.favoriteRestaurantById(restaurant.id, (error, restaurant) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log('Did not favorite successfully')
