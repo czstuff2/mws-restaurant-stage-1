@@ -29,7 +29,7 @@
 	.filter-options h2 {
 		font-size: 1.5em;
 	}
-	#restaurants-list li h1 {
+	#restaurants-list li h2 {
 		font-size: 2em;
 	}
 	#restaurants-list p {
@@ -63,7 +63,7 @@
 
 
 @media screen and (min-width: 737px) {
-	#restaurant-container h1 {
+	#restaurant-container h2 {
 		width: 100%;
 	}
 	#restaurant-container {
