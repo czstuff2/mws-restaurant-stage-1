@@ -106,6 +106,10 @@ fetchIfFavorite = (id) => {
     let favorite = restaurant;
     if (!favorite) {
       console.log(`Not Favorited`);
+      let checkbox = document.getElementById('isFavorited');
+      checkbox.onClick = function() {
+        addFavoriteToggle();
+      }
       return;
     } else {
       // This means the target restaurant is favorited and we need to update the toggle
@@ -124,6 +128,57 @@ fillFavoriteToggle = () => {
   checkbox.setAttribute("aria-checked", "true");
   let header = document.getElementById('favoriteHeader');
   header.innerHTML = "Favorited";
+
+  // since restaurant is a favorite, set a toggle onClick function to remove
+  // from cache AND API via DBHelper calling removeFavoriteToggle
+
+  checkbox.onClick = function() {
+    removeFavoriteToggle();
+  }
+}
+
+removeFavoriteToggle = () => {
+  DBHelper.UnfavoriteRestaurantById(restaurant.id, (error, restaurant) => {
+    let favorite = restaurant;
+    if (!favorite) {
+      console.log('Did not unfavorite successfully')
+      return;
+    } else {
+      let checkbox = document.getElementById('isFavorited');
+      checkbox.checked = false;
+      checkbox.setAttribute("checked", "false");
+      checkbox.setAttribute("aria-checked", "false");
+      let header = document.getElementById('favoriteHeader');
+      header.innerHTML = "Add to Favorites";
+      checkbox.onClick = function() {
+        addFavoriteToggle();
+      }
+    }
+  })
+}
+
+addFavoriteToggle = () => {
+  DBHelper.FavoriteRestaurantById(restaurant.id, (error, restaurant) => {
+    let favorite = restaurant;
+    if (!favorite) {
+      console.log('Did not favorite successfully')
+      return;
+    } else {
+      let checkbox = document.getElementById('isFavorited');
+      checkbox.checked = true;
+      checkbox.setAttribute("checked", "true");
+      checkbox.setAttribute("aria-checked", "true");
+      let header = document.getElementById('favoriteHeader');
+      header.innerHTML = "Favorited";
+
+      // since restaurant is a favorite, set a toggle onClick function to remove
+      // from cache AND API via DBHelper calling removeFavoriteToggle
+
+      checkbox.onClick = function() {
+        removeFavoriteToggle();
+      }
+    }
+  })
 }
 
 /**
