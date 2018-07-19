@@ -38,7 +38,9 @@
 	#restaurants-list li a {
 		font-size: 1.5em;
 	}
-
+	form {
+		font-size:1.5em;
+	}
 }
 
 @media screen and (min-width: 630px) {
@@ -58,7 +60,12 @@
 	#restaurant-hours tr td {
 		font-size: 1.4em;
 	}
-
+	form {
+		font-size:1.75em;
+	}
+	.submitHolder {
+		width: 100%;
+	}
 }
 
 
