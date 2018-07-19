@@ -135,20 +135,19 @@ fetchReviews = () => {
   })
 }
 fetchPendingReviews = () => {
-  DBHelper.fetchPendingReviews(self.restaurant, (error, review) => {
-    if(!review) {
-      console.log("No pending reviews found");
-      return;
-    } else if (review) {
+  DBHelper.fetchPendingReviews(self.restaurant, (tempReview, review) => {
+    if (review) {
       const container = document.getElementById('reviews-container');
       const ul = document.getElementById('reviews-list');
       ul.appendChild(createReviewHTML(review));
       container.appendChild(ul);
-    } else {
+    } else if (tempReview) {
       const container = document.getElementById('reviews-container');
       const ul = document.getElementById('reviews-list');
-      ul.appendChild(createReviewHTML(error));
+      ul.appendChild(createReviewHTML(tempReview));
       container.appendChild(ul);
+    } else {
+      console.log("No pending reviews")
     }
   })
 }

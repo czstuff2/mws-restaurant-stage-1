@@ -58,7 +58,6 @@ class DBHelper {
     fetch(DBHelper.DATABASE_URL) 
       .then(response => response.json())
       .then(function(restaurants) {
-        console.log('successfully pulled restaurants json data')
         // now cache it
         dbPromise.then( (db) => {
           let restaurantValStore = db.transaction('restaurants', 'readwrite').objectStore('restaurants')
@@ -86,7 +85,6 @@ class DBHelper {
     fetch(`http://localhost:1337/reviews/?restaurant_id=${restaurant.id}`)
       .then(response => response.json())
       .then(function(reviews) {
-        console.log(`pulled reviews for ${restaurant.name}`)
           //now cache it
         dbPromise.then( (db) => {
           let reviewsValStore = db.transaction('reviews', 'readwrite').objectStore('reviews')
@@ -105,6 +103,7 @@ class DBHelper {
       })
   }
   //fetch pending reviews 
+  /*
   static fetchPendingReviews(restaurant, callback) {
     dbPromise.then( (db) => {
       let tempReviewsValStore = db.transaction('tempReviews', 'readwrite').objectStore('tempReviews')
@@ -133,6 +132,30 @@ class DBHelper {
             console.log("Pending review submission error, possibily still offline")
             callback(tempReview, null)
           })
+    })
+  } */
+
+  static fetchPendingReviews(restaurant, callback) {
+    dbPromise.then( (db) => {
+      let tempReviewsValStore = db.transaction('tempReviews', 'readwrite').objectStore('tempReviews')
+      return tempReviewsValStore.get(restaurant.id.toString())
+    }).then(tempReview => {
+      if(!tempReview)  {
+        callback(null, null)
+        return
+      }
+      this.submitReview(tempReview, (error, review) => {
+        if (error) {
+          // we were offline again, return the old review from tempReviews
+          console.log("Offline again, returning tempReview")
+          console.log(tempReview)
+          callback(tempReview, null)
+        } else {
+          // we succeeded in POSTing tempReview and removing it from cache return new review for population
+          console.log("successful POSTing tempReview")
+          callback(null, review)
+        }
+      })
     })
   }
   //POST a new review
@@ -203,7 +226,6 @@ class DBHelper {
     fetch(`${DBHelper.DATABASE_URL}/?is_favorite=true`)
       .then(response => response.json())
       .then(function(favorites) {
-        console.log(`successfully pulled favorite restaurants data`)
         // now cache it
         dbPromise.then( (db) => {
           let favoriteValStore = db.transaction('favorites', 'readwrite').objectStore('favorites')
