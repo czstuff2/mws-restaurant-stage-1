@@ -104,6 +104,37 @@ class DBHelper {
         })
       })
   }
+  //fetch pending reviews 
+  static fetchPendingReviews(restaurant, callback) {
+    dbPromise.then( (db) => {
+      let tempReviewsValStore = db.transaction('tempReviews', 'readwrite').objectStore('tempReviews')
+      let tempReview = tempReviewsValStore.get(restaurant.id.toString());
+      return tempReview
+    }).then( review => {
+        if (!review) {
+          return
+        }
+        fetch(`http://localhost:1337/reviews/`, {
+          method: "POST",
+          headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+          body: JSON.stringify(review)
+        }).then(response => response.json())
+          .then(function(newReview) {
+            console.log(newReview)
+            dbPromise.then( (db) => {
+              let tempReviewsValStore = db.transaction('tempReviews', 'readwrite').objectStore('tempReviews')
+              tempReviewsValStore.delete(restaurant.id.toString())
+            })
+            console.log("added Review, removed from cache")
+            callback(null, newReview);
+          }).catch(function (err) {
+            console.log("Pending review submission error, possibily still offline")
+            callback(tempReview, null)
+          })
+    })
+  }
   //POST a new review
   static submitReview(review, callback) {
     dbPromise.then( (db) => {
@@ -126,6 +157,7 @@ class DBHelper {
         callback(null, newReview);
       }).catch(function(err) {
         console.log("Connection Issue, failed");
+        window.alert("Currently Offline!")
         callback(err, null);
       })
   }

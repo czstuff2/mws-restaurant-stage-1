@@ -1,6 +1,7 @@
 let restaurant;
 var newMap;
 let reviews;
+let pendingReviews;
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -95,6 +96,7 @@ fetchRestaurantFromURL = (callback) => {
       fetchIfFavorite(id);
       // get Reviews
       fetchReviews();
+      fetchPendingReviews();
       fillRestaurantHTML();
       callback(null, restaurant)
     });
@@ -129,6 +131,24 @@ fetchReviews = () => {
     } else {
       self.reviews = reviews;
       fillReviewsHTML();
+    }
+  })
+}
+fetchPendingReviews = () => {
+  DBHelper.fetchPendingReviews(self.restaurant, (error, review) => {
+    if(!review) {
+      console.log("No pending reviews found");
+      return;
+    } else if (review) {
+      const container = document.getElementById('reviews-container');
+      const ul = document.getElementById('reviews-list');
+      ul.appendChild(createReviewHTML(review));
+      container.appendChild(ul);
+    } else {
+      const container = document.getElementById('reviews-container');
+      const ul = document.getElementById('reviews-list');
+      ul.appendChild(createReviewHTML(error));
+      container.appendChild(ul);
     }
   })
 }
